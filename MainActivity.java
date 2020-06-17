@@ -18,6 +18,9 @@ public class MainActivity extends AppCompatActivity {
     private static double W = 2000;
     private double[] signal = new double[N];
     private double[] anothersignal = new double[N];
+    double RxxTime;
+    double RxyTime;
+    long ctime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +28,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         LineGraphSeries<DataPoint> series1 = new LineGraphSeries<>(generateSignal(signal));
+        ctime = System.currentTimeMillis();
         LineGraphSeries<DataPoint> series2 = new LineGraphSeries<>(autoCorrelate(signal));
+        RxxTime = (double) (System.currentTimeMillis() - ctime);
         generateSignal(anothersignal);
+        ctime = System.currentTimeMillis();
         LineGraphSeries<DataPoint> series3 = new LineGraphSeries<>(Correlate(signal, anothersignal));
+        RxyTime = (double) (System.currentTimeMillis() - ctime);
         GraphView graph = findViewById(R.id.graph1);
         customizationGraph(graph, series1, -14, 14);
         graph = findViewById(R.id.graph2);
@@ -35,9 +42,11 @@ public class MainActivity extends AppCompatActivity {
         graph = findViewById(R.id.graph3);
         customizationGraph(graph, series2, -1, 2);
         Toast.makeText(getApplicationContext(), String.format(
-                "Dispersion = %s; MathExpectation = %s",
+                "Dispersion = %s; MathExpectation = %s; T(Rxx) = %s ms; T(Rxy) = %s ms",
                 Dispersion(signal),
-                MathExpectation(signal)
+                MathExpectation(signal),
+                Math.round(RxxTime),
+                Math.round(RxyTime)
         ), Toast.LENGTH_LONG).show();
     }
 
