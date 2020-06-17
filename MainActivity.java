@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     double RxxTime;
     double RxyTime;
     long ctime;
+    boolean flag = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +42,14 @@ public class MainActivity extends AppCompatActivity {
         customizationGraph(graph, series2, -1, 2);
         graph = findViewById(R.id.graph3);
         customizationGraph(graph, series2, -1, 2);
+        if (RxxTime < RxyTime) flag = false;
         Toast.makeText(getApplicationContext(), String.format(
-                "Dispersion = %s; MathExpectation = %s; T(Rxx) = %s ms; T(Rxy) = %s ms",
+                "Dispersion = %s; MathExpectation = %s; T(Rxx) = %s ms; T(Rxy) = %s ms; T(Rxx) > T(Rxy) : %s ",
                 Dispersion(signal),
                 MathExpectation(signal),
                 Math.round(RxxTime),
-                Math.round(RxyTime)
+                Math.round(RxyTime),
+                flag
         ), Toast.LENGTH_LONG).show();
     }
 
